@@ -5,7 +5,7 @@ The idea is to let you :
 
 ```
 ! git clone https://github.com/mdda/colab_helper
-from colab_helper import utils as utils
+from colab_helper import utils as chu
 ```
 
 at the top of a notebook, and have a bunch of useful stuff ready-to-go 
