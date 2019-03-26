@@ -15,7 +15,7 @@ def gdrive_mount(point='gdrive', link='my_drive'):
     subprocess.run(["ln", "-s", point+"/My Drive", link,])
     print("'%s' mounted as '%s'" % (point+"/My Drive", link,))
 
-def download(url, base_path='.', uncompress=True, dest_path=''):
+def download(url, base_path='.', unwrap=True, dest_path=''):
   if not os.path.exists(base_path):
     os.makedirs(base_path)
 
@@ -37,12 +37,12 @@ def download(url, base_path='.', uncompress=True, dest_path=''):
       if response.status_code == requests.codes.ok:
         print("Downloading %s" % (url,))
         with open(urlfilepath, 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
+          shutil.copyfileobj(response.raw, out_file)
       else:
         print("FAILED TO DOWNLOAD %s" % (url,))
         return
     
-    if uncompress:
+    if unwrap:
       url_file_l = url_file.lower()
       
       if url_file_l.endswith('.zip'):
