@@ -41,7 +41,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
     
     if is_zip or is_tar: # Unwrappable
       # Does the dest_path have stuff in it?
-      if os.path.isdir( dest_path_full ) and len(os.listdir( dest_path_full ))>=2:
+      if os.path.isdir( dest_path_full ) and len(os.listdir( dest_path_full ))>0:
         print("'%s' already has files in it" % (dest_path_full,))
         return
         
@@ -78,13 +78,14 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
       tarfile.open(urlfilepath, tar_flags).extractall(dest_path_full)
       #shutil.move(os.path.join(models_dir, models_orig_dir), os.path.join(models_dir, models_here_dir))
 
-    if dest_path is not None and len(os.listdir( dest_path_full ))>2:
+    if dest_path is not None and len(os.listdir( dest_path_full ))>0:
       # Something appeared in dest_path : no need for unwrapped file
       print("Deleting '%s'" % (urlfilepath,))
       os.unlink(urlfilepath)
 
-  if len(os.listdir( dest_path_full ))>2:
+  if len(os.listdir( dest_path_full ))>0:
     print("'%s' now contains data" % (dest_path_full,))  
+    pass
 
 """
 if not os.path.isfile( os.path.join(tf_zoo_models_dir, 'models', 'README.md') ):
