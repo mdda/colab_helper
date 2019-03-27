@@ -42,7 +42,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
     if is_zip or is_tar: # Unwrappable
       # Does the dest_path have stuff in it?
       if os.path.isdir( dest_path_full ) and len(os.listdir( dest_path_full ))>=2:
-        # Something already in dest_path_full
+        print("'%s' already has files in it" % (dest_path_full,))
         return
         
   if not fetch_url:
