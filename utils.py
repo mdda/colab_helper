@@ -105,7 +105,8 @@ def kaggle_credentials(username=None, key=None, file=None):
   in the 'API' section using the 'Create New API Token' button, or 
   just use your username with the generated key
   """
-  kaggle_path = USER_BASE+'/.kaggle'
+  #kaggle_path = USER_BASE+'/.kaggle'
+  kaggle_path = '/root'+'/.kaggle'
   kaggle_file = kaggle_path+'/kaggle.json'
   
   if username is None or key is None:
@@ -123,7 +124,8 @@ def kaggle_credentials(username=None, key=None, file=None):
   if not os.path.exists(kaggle_path):
     os.makedirs(kaggle_path)
     
-  json.write(data, kaggle_file)
+  with open(kaggle_file, 'w') as f:
+    json.dump(data, f)
   os.chmod(kaggle_file, 0o600)
   
   print("Credentials written to %s" % (kaggle_file,))
