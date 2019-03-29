@@ -97,28 +97,28 @@ if not os.path.isfile( os.path.join(tf_zoo_models_dir, 'models', 'README.md') ):
 sys.path.append(tf_zoo_models_dir + "/models/research/slim")
 """
 
-def kaggle_credentials(user=None, token=None, file=None):
+def kaggle_credentials(username=None, key=None, file=None):
   """
   Put the kaggle credentials in the right place, 
   with the right permissions.  You can generate the 
-  kaggle.json file from the User Profile page, or 
-  just use your user name with the generated token
+  kaggle.json file from the 'My Account' page 
+  in the 'API' section using the 'Create New API Token' button, or 
+  just use your username with the generated key
   """
   kaggle_path = USER_BASE+'/.kaggle'
   kaggle_file = kaggle_path+'/kaggle.json'
   
-  if user is None or token is None:
+  if username is None or key is None:
     if file is None:
-      print("Please specify user+token (from Kaggle-User-Profile page, or file")
+      print("Please specify username+key (from Kaggle-My Account page, or file")
       return
     else:
       # use the file provided
       with open(file,'rt') as f:
         data = json.load(f)
-        user, token = data['user'], data['token']
+        username, key = data['username'], data['key']
         
-  #with open(USER_BASE+'/.kaggle/kaggle.json','wt') as f:
-  data = dict( user=user, token=token )
+  data = dict( username=username, key=key )
   
   if not os.path.exists(kaggle_path):
     os.makedirs(kaggle_path)
@@ -126,4 +126,5 @@ def kaggle_credentials(user=None, token=None, file=None):
   json.write(data, kaggle_file)
   os.chmod(kaggle_file, 0o600)
   
+  print("Credentials written to %s" % (kaggle_file,))
 
