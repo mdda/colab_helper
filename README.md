@@ -26,7 +26,7 @@ chu.gdrive_mount(point='gd', link='mgd')
 
 ### Downloader/Unwrapper
 
-This just let's you cleanly download data (unwrapping by default), without downloading
+This just cleanly downloads data (unwrapping by default), without downloading
 (or unwrapping) when the required files are already present.
 
 Single file (no unwrap required): 
@@ -36,7 +36,7 @@ chu.download('http://redcatlabs.com/'
              +'glove.first-100k.6B.50d.txt')
 ```
 
-more complex `.tar.gz` example (the `dest_path` parameter allows it to check on whether the 
+More complex `.tar.gz` example (the `dest_path` parameter allows it to check on whether the 
 unwrapped files have appeared in a particular directory) :
 ```
 chu.download('http://www.openslr.org/'
