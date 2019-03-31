@@ -54,7 +54,7 @@ or just use your `username` and `key` in-line :
 chu.kaggle_credentials(file='./kaggle.json')
 ```
 
-Then you can access the Kaggle CLI :
+Then you can access the Kaggle CLI (see also [the Kaggle API docs](https://github.com/Kaggle/kaggle-api)):
 
 ```
 # Description page : https://www.kaggle.com/ronitf/heart-disease-uci

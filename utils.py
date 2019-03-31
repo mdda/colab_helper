@@ -129,3 +129,11 @@ def kaggle_credentials(username=None, key=None, file=None):
   
   print("Credentials written to %s" % (kaggle_file,))
 
+
+
+# https://colab.research.google.com/notebooks/io.ipynb#scrollTo=S7c8WYyQdh5i
+# Fuse mounting approach :
+#   https://cloud.google.com/storage/docs/gcs-fuse
+#   https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
+def gcs_mount():
+  pass
