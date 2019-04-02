@@ -135,5 +135,7 @@ def kaggle_credentials(username=None, key=None, file=None):
 # Fuse mounting approach :
 #   https://cloud.google.com/storage/docs/gcs-fuse
 #   https://github.com/GoogleCloudPlatform/gcsfuse/blob/master/docs/installing.md
+# More helpful than Google installation instructions...
+#   https://github.com/mixuala/colab_utils/blob/master/gcloud.py#L599
 def gcs_mount():
   pass
