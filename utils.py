@@ -14,6 +14,8 @@ def status():
   import numpy as np
   
   img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
+  #img_path = './colab_helper/img/RedDragon_logo_260x39.png'
+  print(img_path)
   pil_im = Image.open(img_path) #Take jpg + png
   plt.imshow(np.asarray(pil_im))
   plt.show()
