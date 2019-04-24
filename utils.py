@@ -158,6 +158,6 @@ def gcs_mount():
 if True:
   try:
     from IPython.display import Image, display
-    return Image(filename=img_path)
+    Image(filename=img_path)
   except:
     pass
