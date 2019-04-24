@@ -12,14 +12,14 @@ def status():
   img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
   # /content/colab_helper/img/RedDragon_logo_260x39.png
   #print(img_path)
-
-  #import matplotlib.pyplot as plt
-  #from PIL import Image
-  #import numpy as np
+  return
   
-  #pil_im = Image.open(img_path) #Take jpg + png
-  #plt.imshow(np.asarray(pil_im))
-  #plt.show()
+  try:
+    from IPython.display import Image, display
+    return Image(filename=img_path)
+  except:
+    pass
+
   
   #return
   
@@ -155,9 +155,12 @@ def kaggle_credentials(username=None, key=None, file=None):
 def gcs_mount():
   pass
 
-if True:
-  try:
-    from IPython.display import Image, display
-    Image(filename=img_path)
-  except:
-    pass
+
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+
+img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
+pil_im = Image.open(img_path) 
+plt.imshow(np.asarray(pil_im))
+plt.show()
