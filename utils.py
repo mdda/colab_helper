@@ -7,11 +7,11 @@ import json
 USER_BASE='/content'
 
 def status():
-  print("Doing fine")
+  print("\nDoing fine\n")
   
   img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
-  #img_path = './colab_helper/img/RedDragon_logo_260x39.png'
-  print(img_path)
+  # /content/colab_helper/img/RedDragon_logo_260x39.png
+  #print(img_path)
 
   #import matplotlib.pyplot as plt
   #from PIL import Image
@@ -21,13 +21,11 @@ def status():
   #plt.imshow(np.asarray(pil_im))
   #plt.show()
   
-  return
+  #return
   
   try:
-    # display model image file inline
     from IPython.display import Image, display
-    #print(img)
-    return Image(filename=img)
+    return Image(filename=img_path)
   except:
     pass
   
