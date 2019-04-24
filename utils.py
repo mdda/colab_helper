@@ -6,6 +6,15 @@ import json
 
 USER_BASE='/content'
 
+try:
+  # display model image file inline
+  from IPython.display import Image, display
+  img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
+  print(img)
+  Image(img)
+except:
+  pass
+
 def status():
   print("Doing fine")
   
