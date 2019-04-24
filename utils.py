@@ -13,7 +13,7 @@ def status():
     from IPython.display import Image, display
     img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
     #print(img)
-    return display( Image(filename=img) )
+    return Image(filename=img)
   except:
     pass
   
