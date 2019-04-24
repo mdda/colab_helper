@@ -23,11 +23,6 @@ def status():
   
   #return
   
-  try:
-    from IPython.display import Image, display
-    return Image(filename=img_path)
-  except:
-    pass
   
 def gdrive_mount(point='gdrive', link='my_drive'):
   from google.colab import drive
@@ -160,4 +155,9 @@ def kaggle_credentials(username=None, key=None, file=None):
 def gcs_mount():
   pass
 
-
+if True:
+  try:
+    from IPython.display import Image, display
+    return Image(filename=img_path)
+  except:
+    pass
