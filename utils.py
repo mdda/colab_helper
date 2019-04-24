@@ -8,6 +8,14 @@ USER_BASE='/content'
 
 def status():
   print("Doing fine")
+  try:
+    # display model image file inline
+    from IPython.display import Image, display
+    img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
+    #print(img)
+    display( Image(filename=img) )
+  except:
+    pass
   
 def gdrive_mount(point='gdrive', link='my_drive'):
   from google.colab import drive
@@ -140,12 +148,4 @@ def kaggle_credentials(username=None, key=None, file=None):
 def gcs_mount():
   pass
 
-try:
-  # display model image file inline
-  from IPython.display import Image, display
-  img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
-  #print(img)
-  display( Image(filename=img) )
-except:
-  pass
 
