@@ -6,15 +6,6 @@ import json
 
 USER_BASE='/content'
 
-try:
-  # display model image file inline
-  from IPython.display import Image, display
-  img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
-  print(img)
-  Image(img)
-except:
-  pass
-
 def status():
   print("Doing fine")
   
@@ -148,3 +139,13 @@ def kaggle_credentials(username=None, key=None, file=None):
 #   https://github.com/mixuala/colab_utils/blob/master/gcloud.py#L599
 def gcs_mount():
   pass
+
+try:
+  # display model image file inline
+  from IPython.display import Image, display
+  img = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
+  #print(img)
+  display( Image(filename=img) )
+except:
+  pass
+
