@@ -166,6 +166,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   import socket, os
   subdomain = 'colab_' + socket.gethostname()
 
+  pub_key = pub_key.strip().replace("\n", "")
+
   sshd = '/usr/sbin/sshd'
   if len(_RunningProcessCmdlines(sshd))==0:
     if not os.path.isdir("/var/run/sshd"):
@@ -222,7 +224,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     print("ssh proxy exit code = %d" % (ec,))
 
   if jump:
-    print("\n# Your public key is in authorized_keys, so no password required - Execute locally:")
+    print("# Your public key is in authorized_keys, so no password required")
+    print("\n# Execute locally:")
     print("ssh -J %s root@%s" % (host, subdomain,))
   else:
     print("Non-jump hosts not supported, yet")
