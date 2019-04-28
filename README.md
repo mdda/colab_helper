@@ -4,7 +4,6 @@ Utility files to help set up colab for experimentation + development
 The idea is to let you :
 
 ```
-! rm -rf colab_helper
 ! git clone https://github.com/mdda/colab_helper
 from colab_helper import utils as chu
 ```
@@ -80,7 +79,7 @@ ihku00gbBwSOu2M38GMdGV9qU9XrEkLSjD/1WtzYJZL7buzpitlGlTvhnqQT+t andrewsm@square.h
 ```
 
 The `pub_key` field sanitises the line-breaks pasted in from `~/.ssh/id_rsa.pub` for your convenience.  
-And as an aside, there's no problem leaving your public key(s) in the colab file itself, 
+And, as an aside, there's no problem leaving your public key(s) in the colab file itself, 
 since that's not the private key bit (obviously).
 
 
