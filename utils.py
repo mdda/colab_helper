@@ -165,15 +165,16 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   import socket, os
   subdomain = 'colab_' + socket.gethostname()
 
-  if len(_RunningProcessCmdlines('sshd'))==0:
+  sshd = '/usr/sbin/sshd'
+  if len(_RunningProcessCmdlines(sshd))==0:
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('/usr/sbin/sshd -D &')
-    proc = subprocess.Popen(['/usr/sbin/sshd','-D','&'], shell=True)
+    proc = subprocess.Popen([sshd, '-D', '&'], shell=True)
     print("sshd pid = %d" % (proc.pid,))
 
-  # Wait for it to start up
-  while len(_RunningProcessCmdlines('sshd'))==0:
+  while len(_RunningProcessCmdlines('/usr/sbin/sshd'))==0:
+    print("Wait on sshd start")
     time.sleep(0.1)
     
   if not os.path.isdir("/root/.ssh"):
@@ -192,7 +193,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
       ak.write("\n")
     os.chmod('/root/.ssh/authorized_keys', 0o600)
   
-  ssh_cmds = [ ' '.join(c) for c in _RunningProcessCmdlines('ssh') ]
+  ssh = '/usr/bin/ssh'
+  ssh_cmds = [ ' '.join(c) for c in _RunningProcessCmdlines(ssh) ]
   print("ssh_cmds :", ssh_cmds)
   has_22 = [ True for s in ssh_cmds if '22:localhost:22' in s ]
   print("has_22 :", has_22)
@@ -200,11 +202,11 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   if len(has_22)==0:
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % ('colab_ea8f2354f97c',))  # Has entry in `ps fax`
-    proc = subprocess.Popen(['ssh', '-o', 'StrictHostKeyChecking=no', 
+    proc = subprocess.Popen([ssh, '-o', 'StrictHostKeyChecking=no', 
                                     '-R', '%s:22:localhost:22' % (subdomain,), 
                                     '%s' % (host,), 
                                     '&'], shell=True)
-    print(' '.join(['ssh', '-o', 'StrictHostKeyChecking=no', 
+    print(' '.join([ssh, '-o', 'StrictHostKeyChecking=no', 
                                     '-R', '%s:22:localhost:22' % (subdomain,), 
                                     '%s' % (host,), 
                                     '&']))
