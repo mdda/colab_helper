@@ -169,8 +169,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('/usr/sbin/sshd -D &')
-    pid = subprocess.Popen(['/usr/sbin/sshd','-D','&'], shell=True)
-    print("sshd pid = %d" % (pid,))
+    proc = subprocess.Popen(['/usr/sbin/sshd','-D','&'], shell=True)
+    print("sshd pid = %d" % (proc.pid,))
 
   # Wait for it to start up
   while len(_RunningProcessCmdlines('sshd'))==0:
@@ -191,8 +191,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
-    pid = subprocess.Popen(['ssh', '-o StrictHostKeyChecking=no', '-R %s:22:localhost:22 %s' % (subdomain, host,), '&'], shell=True)
-    print("ssh proxy pid = %d" % (pid,))
+    proc = subprocess.Popen(['ssh', '-o StrictHostKeyChecking=no', '-R %s:22:localhost:22 %s' % (subdomain, host,), '&'], shell=True)
+    print("ssh proxy pid = %d" % (proc.pid,))
 
   if jump:
     print("ssh -J %s root@%s # Your public key is in authorized_keys, so no password required" % (host, subdomain,))
