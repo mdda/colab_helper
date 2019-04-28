@@ -179,17 +179,25 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   if not os.path.isdir("/root/.ssh"):
     os.mkdir("/root/.ssh", mode=0o700)
 
-  with open('/root/.ssh/authorized_keys', 'at') as ak:
-    ak.write(pub_key)
-    ak.write("\n")
-  os.chmod('/root/.ssh/authorized_keys', 0o600)
+  key_exists=False
+  if os.path.isfile("/root/.ssh/authorized_keys"):
+    with open('/root/.ssh/authorized_keys', 'rt') as ak:
+      for l in ak:
+        if pub_key in l:
+          key_exists=True
+          
+  if not key_exists:
+    with open('/root/.ssh/authorized_keys', 'at') as ak:
+      ak.write(pub_key)
+      ak.write("\n")
+    os.chmod('/root/.ssh/authorized_keys', 0o600)
   
   ssh_cmds = [ ' '.join(c) for c in _RunningProcessCmdlines('ssh') ]
+  print("ssh_cmds :", ssh_cmds)
   has_22 = [ True for s in ssh_cmds if '22:localhost:22' in s ]
+  print("has_22 :", has_22)
   
   if len(has_22)==0:
-    if not os.path.isdir("/var/run/sshd"):
-      os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % ('colab_ea8f2354f97c',))  # Has entry in `ps fax`
     proc = subprocess.Popen(['ssh', '-o', 'StrictHostKeyChecking=no', 
