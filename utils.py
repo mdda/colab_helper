@@ -18,8 +18,8 @@ def gdrive_mount(point='gdrive', link='my_drive'):
   if link is not None:
     # ! ln -s "gdrive/My Drive" my_drive 
     # subprocess.run(["ln", "-s", point+"/My Drive", link,])
-    subprocess.call(["ln", "-s", point+"/My Drive", link,])
-    print("'%s' mounted as '%s'" % (point+"/My Drive", link,))
+    subprocess.call(["ln", "-s", point+"/My Drive", link, ])
+    print("'%s' mounted as '%s'" % (point+"/My Drive", link, ))
 
 
 def download(url, base_path='.', unwrap=True, dest_path=None):

@@ -10,7 +10,7 @@ from colab_helper import utils as chu
 
 at the top of a notebook, and have a bunch of useful stuff ready-to-go 
 (you can choose the name under which to import it, 
-so that you can avoid collisions with your existing code).
+so as to avoid collisions with your existing code).
 
 
 ### Google Drive helper
@@ -20,8 +20,8 @@ adds a link, so that you can use a path that doesn't need the awkard space chara
 introduced by 'My Drive' :
 
 ```
-chu.gdrive_mount(point='gd', link='mgd')
-! ls -l mgd/*
+chu.gdrive_mount(point='gdrive', link='my_drive')
+! ls -l my_drive/*
 ```
 
 ### Downloader/Unwrapper
@@ -61,6 +61,7 @@ Then you can access the Kaggle CLI (see also [the Kaggle API docs](https://githu
 ! kaggle datasets download ronitf/heart-disease-uci
 ```
 
+
 ### SSH Reverse Proxy
 
 >   This is for *expert use* only.  If you don't know what this is doing, 
@@ -82,6 +83,4 @@ ihku00gbBwSOu2M38GMdGV9qU9XrEkLSjD/1WtzYJZL7buzpitlGlTvhnqQT+t andrewsm@square.h
 The `pub_key` field sanitises the line-breaks pasted in from `~/.ssh/id_rsa.pub` for your convenience.  
 And, as an aside, there's no problem leaving your public key(s) in the colab file itself, 
 since that's not the private key bit (obviously).
-
-
 
