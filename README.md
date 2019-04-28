@@ -9,7 +9,8 @@ from colab_helper import utils as chu
 ```
 
 at the top of a notebook, and have a bunch of useful stuff ready-to-go 
-(optionally without flooding your namespace with stuff).
+(you can choose the name under which to import it, 
+so that you can avoid collisions with your existing code).
 
 
 ### Google Drive helper
