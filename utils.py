@@ -191,7 +191,9 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
-    proc = subprocess.Popen(['ssh', '-o StrictHostKeyChecking=no', '-R %s:22:localhost:22 %s' % (subdomain, host,), '&'], shell=True)
+    proc = subprocess.Popen(['ssh', '-o', 'StrictHostKeyChecking=no', 
+                                    '-R', '%s:22:localhost:22' % (subdomain,), '%s' % (host,), 
+                                    '&'], shell=True)
     print("ssh proxy pid = %d" % (proc.pid,))
 
   if jump:
