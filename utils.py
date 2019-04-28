@@ -171,7 +171,8 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('/usr/sbin/sshd -D &')
-    proc = subprocess.Popen([sshd, '-D', '&'], shell=True)
+    #proc = subprocess.Popen([sshd, '-D', '&'], shell=True)
+    proc = subprocess.Popen([sshd], shell=True)  # Defaults should detach...
     print("sshd pid = %d" % (proc.pid,))
 
   while len(_RunningProcessCmdlines('/usr/sbin/sshd'))==0:
@@ -203,15 +204,22 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   if len(has_22)==0:
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % ('colab_ea8f2354f97c',))  # Has entry in `ps fax`
-    proc = subprocess.Popen([ssh, '-o', 'StrictHostKeyChecking=no', 
-                                    '-R', '%s:22:localhost:22' % (subdomain,), 
+    
+    #proc = subprocess.Popen([ssh, '-o StrictHostKeyChecking=no', 
+    #                                '-R %s:22:localhost:22' % (subdomain,), 
+    #                                '%s' % (host,), 
+    #                                '&'], shell=True)
+    #print("ssh proxy pid = %d" % (proc.pid,))
+    
+    # https://github.com/ipython/ipython/blob/a051c3a81fba63f779ac47cf5299a46adaa6988d/IPython/core/interactiveshell.py#L2482
+    cmd = ' '.join( [ssh, '-o StrictHostKeyChecking=no', 
+                                    '-R %s:22:localhost:22' % (subdomain,), 
                                     '%s' % (host,), 
-                                    '&'], shell=True)
-    print(' '.join([ssh, '-o', 'StrictHostKeyChecking=no', 
-                                    '-R', '%s:22:localhost:22' % (subdomain,), 
-                                    '%s' % (host,), 
-                                    '&']))
-    print("ssh proxy pid = %d" % (proc.pid,))
+                                    '&'] )
+
+    executable = os.environ.get('SHELL', None)
+    ec = subprocess.call(cmd, shell=True, executable=executable)
+    print("ssh proxy exit code = %d" % (ec,))
 
   if jump:
     print("\n# Your public key is in authorized_keys, so no password required - Execute locally:")
