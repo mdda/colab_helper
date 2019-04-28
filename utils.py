@@ -1,5 +1,6 @@
 import os, sys
 import subprocess
+import time
 
 import requests, shutil
 import json
@@ -8,29 +9,18 @@ USER_BASE='/content'
 
 def status():
   print("\nDoing fine\n")
-  
-  img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
-  # /content/colab_helper/img/RedDragon_logo_260x39.png
-  #print(img_path)
-  return
-  
-  try:
-    from IPython.display import Image, display
-    return Image(filename=img_path)
-  except:
-    pass
+  return 
 
-  
-  #return
-  
   
 def gdrive_mount(point='gdrive', link='my_drive'):
   from google.colab import drive
   drive.mount(point)
   if link is not None:
     # ! ln -s "gdrive/My Drive" my_drive 
-    subprocess.run(["ln", "-s", point+"/My Drive", link,])
+    # subprocess.run(["ln", "-s", point+"/My Drive", link,])
+    subprocess.call(["ln", "-s", point+"/My Drive", link,])
     print("'%s' mounted as '%s'" % (point+"/My Drive", link,))
+
 
 def download(url, base_path='.', unwrap=True, dest_path=None):
   if not os.path.exists(base_path):
@@ -155,9 +145,61 @@ def kaggle_credentials(username=None, key=None, file=None):
 def gcs_mount():
   pass
   
+
+
+def _RunningProcessCmdlines(processName):
+  '''
+  Check if there is any running process that contains the given name processName.
+  '''
+  cmds=[]
+  for proc in psutil.process_iter():
+    try:
+      # Check if process name contains the given name string.
+      if processName.lower() in proc.name().lower():
+        cmds.append( proc.cmdline() )
+    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+      pass
+  return cmds
+      
+def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
+  import socket, os
+  subdomain = 'colab_' + socket.gethostname()
+
+  if len(_RunningProcessCmdlines('sshd'))==0:
+    if not os.path.isdir("/var/run/sshd"):
+      os.mkdir("/var/run/sshd", mode=0o755)
+    # get_ipython().system_raw('/usr/sbin/sshd -D &')
+    pid = subprocess.Popen(['/usr/sbin/sshd','-D','&'], shell=True)
+    print("sshd pid = %d" % (pid,))
+
+  # Wait for it to start up
+  while len(_RunningProcessCmdlines('sshd'))==0:
+    time.sleep(0.1)
+    
+  if not os.path.isdir("/root/.ssh"):
+    os.mkdir("/root/.ssh", mode=0o700)
+
+  with open('/root/.ssh/authorized_keys', 'at') as ak:
+    ak.write(pub_key)
+    ak.write("\n")
+  os.chmod('/root/.ssh/authorized_keys', 0o600)
   
-def ssh_reverse_proxy():
-  pass
+  ssh_cmds = [ ' '.join(c) for c in _RunningProcessCmdlines('ssh') ]
+  has_22 = [ True for s in ssh_cmds if '22:localhost:22' in s ]
+  
+  if len(has_22)==0:
+    if not os.path.isdir("/var/run/sshd"):
+      os.mkdir("/var/run/sshd", mode=0o755)
+    # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
+    pid = subprocess.Popen(['ssh', '-o StrictHostKeyChecking=no', '-R %s:22:localhost:22 %s' % (subdomain, host,), '&'], shell=True)
+    print("ssh proxy pid = %d" % (pid,))
+
+  if jump:
+    print("ssh -J %s root@%s # Your public key is in authorized_keys, so no password required" % (host, subdomain,))
+  else:
+    print("Non-jump hosts not supported, yet")
+
+
 
 # Show logo on load...
 
