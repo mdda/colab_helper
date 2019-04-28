@@ -67,8 +67,8 @@ Then you can access the Kaggle CLI (see also [the Kaggle API docs](https://githu
 >   This is for *expert use* only.  If you don't know what this is doing, 
 >   or how to get it to run, then this isn't something you should be messing with.
 
->   Note also that this is far 'cleaner' than other scripts you might find on the web : 
->   It doesn't allow logins via passwords, for instance, nor execute arbitrary scripts from the web.
+>   Note also that this is far more security conscientious than other scripts you might find on the web : 
+>   It doesn't allow logins via passwords, for instance, nor execute arbitrary scripts downloaded from a url.
 
 Example use (it will print out the required local `ssh` command) :
 
@@ -80,7 +80,7 @@ ihku00gbBwSOu2M38GMdGV9qU9XrEkLSjD/1WtzYJZL7buzpitlGlTvhnqQT+t andrewsm@square.h
 """)
 ```
 
-The `pub_key` field sanitises the line-breaks pasted in from `~/.ssh/id_rsa.pub` for your convenience.  
+The `pub_key` field cleans out any line-breaks pasted in from `~/.ssh/id_rsa.pub` for your convenience.  
 And, as an aside, there's no problem leaving your public key(s) in the colab file itself, 
 since that's not the private key bit (obviously).
 
