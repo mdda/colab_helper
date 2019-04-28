@@ -191,13 +191,20 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     if not os.path.isdir("/var/run/sshd"):
       os.mkdir("/var/run/sshd", mode=0o755)
     # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % (subdomain,))  # Has entry in `ps fax`
+    # get_ipython().system_raw('ssh -o StrictHostKeyChecking=no -R %s:22:localhost:22 serveo.net &' % ('colab_ea8f2354f97c',))  # Has entry in `ps fax`
     proc = subprocess.Popen(['ssh', '-o', 'StrictHostKeyChecking=no', 
-                                    '-R', '%s:22:localhost:22' % (subdomain,), '%s' % (host,), 
+                                    '-R', '%s:22:localhost:22' % (subdomain,), 
+                                    '%s' % (host,), 
                                     '&'], shell=True)
+    print(' '.join(['ssh', '-o', 'StrictHostKeyChecking=no', 
+                                    '-R', '%s:22:localhost:22' % (subdomain,), 
+                                    '%s' % (host,), 
+                                    '&']))
     print("ssh proxy pid = %d" % (proc.pid,))
 
   if jump:
-    print("ssh -J %s root@%s # Your public key is in authorized_keys, so no password required" % (host, subdomain,))
+    print("\n# Your public key is in authorized_keys, so no password required - Execute locally:")
+    print("ssh -J %s root@%s" % (host, subdomain,))
   else:
     print("Non-jump hosts not supported, yet")
 
