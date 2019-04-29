@@ -229,6 +229,7 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
     ec = subprocess.call(cmd, shell=True, executable=executable)
     print("ssh proxy exit code = %d" % (ec,))
 
+  # Hmm : https://rclone.org/
   if jump:
     print("# Your public key is in authorized_keys, so no password required")
     print("\n# Execute locally:")
@@ -236,8 +237,10 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
 If your version of ssh is new enough (OpenSSH >= v7.3), you can use the -J (ProxyJump) option:
     rsync -azv -e 'ssh -J USER@PROXYHOST:PORT' foo/ dest:./foo/
     """
-    print("""SSH_COLAB=\"ssh -J %s root@%s\"""" % (host, subdomain,))
-    print("""SYNC_CODE=\"rsync -azv -e 'ssh -J %s' ./code/ root@%s:/content/code/\""""  % (host, subdomain,))
+    #print("""ssh -J %s root@%s""" % (host, subdomain,))
+    print("""TO_COLAB=\"ssh -J %s\"""" % (host, ))
+    #print("""rsync -avz -e 'ssh -J %s' ./code/ root@%s:/content/code/"""  % (host, subdomain,))
+    print("""rsync -avz -e ${TO_COLAB} ./code/ root@%s:/content/code/"""  % (subdomain,))
   else:
     print("Non-jump hosts not supported, yet")
 
