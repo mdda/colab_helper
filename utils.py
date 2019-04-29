@@ -232,15 +232,14 @@ def ssh_reverse_proxy(pub_key, host='serveo.net', port=22, jump=True):
   # Hmm : https://rclone.org/
   if jump:
     print("# Your public key is in authorized_keys, so no password required")
-    print("\n# Execute locally:")
+    print("\n# For the use-case of syncing to colab, run locally:")
     """
 If your version of ssh is new enough (OpenSSH >= v7.3), you can use the -J (ProxyJump) option:
     rsync -azv -e 'ssh -J USER@PROXYHOST:PORT' foo/ dest:./foo/
     """
     #print("""ssh -J %s root@%s""" % (host, subdomain,))
-    print("""TO_COLAB=\"ssh -J %s\"""" % (host, ))
-    #print("""rsync -avz -e 'ssh -J %s' ./code/ root@%s:/content/code/"""  % (host, subdomain,))
-    print("""rsync -avz -e ${TO_COLAB} ./code/ root@%s:/content/code/"""  % (subdomain,))
+    #print("""TO_COLAB=\"ssh -J %s\"""" % (host, ))
+    print("""rsync -avz -e \"ssh -J %s\" ./code/ root@%s:/content/code/"""  % (host, subdomain,))
   else:
     print("Non-jump hosts not supported, yet")
 
