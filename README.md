@@ -84,3 +84,11 @@ The `pub_key` field cleans out any line-breaks pasted in from `~/.ssh/id_rsa.pub
 And, as an aside, there's no problem leaving your public key(s) in the colab file itself, 
 since that's not the private key bit (obviously).
 
+Using the `rsync` command given in the output, one can then do a auto-sync-to-colab for
+locally edited files (use the `%autoreload 2` [magic](https://ipython.readthedocs.io/en/stable/config/extensions/autoreload.html?highlight=autoreload) to 
+transparently have the updated code reloaded as you run the notebook cells) : 
+
+```
+while rsync-command-from-colab_helper; do inotifywait -qqre close_write,move,create,delete code/; done
+```
+
