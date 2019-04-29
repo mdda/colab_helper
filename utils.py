@@ -156,7 +156,7 @@ def _RunningProcessCmdlines(processName):
     try:
       # Check if process name contains the given name string.
       #if processName.lower() in proc.name().lower():
-      if processName == proc.cmdline()[0]:
+      if len(proc.cmdline())>0 and proc.cmdline()[0] == processName:
         cmds.append( proc.cmdline() )
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
       pass
