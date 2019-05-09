@@ -22,6 +22,11 @@ def gdrive_mount(point='gdrive', link='my_drive'):
     print("'%s' mounted as '%s'" % (point+"/My Drive", link, ))
 
 
+def set_display_width(width=100):  # in pct
+  from IPython.core.display import display, HTML
+  return display(HTML("<style>.container { width: %d%% !important; }</style>" % (width,)))
+
+
 def download(url, base_path='.', unwrap=True, dest_path=None):
   if not os.path.exists(base_path):
     os.makedirs(base_path)
@@ -241,6 +246,10 @@ If your version of ssh is new enough (OpenSSH >= v7.3), you can use the -J (Prox
     #print("""TO_COLAB=\"ssh -J %s\"""" % (host, ))
     print("""rsync -avz -e \"ssh -J %s\" ./code/ root@%s:/content/code/"""  % (host, subdomain,))
   else:
+    """
+    https://www.howtoforge.com/reverse-ssh-tunneling    
+    https://dev.to/k4ml/poor-man-ngrok-with-tcp-proxy-and-ssh-reverse-tunnel-1fm
+    """
     print("Non-jump hosts not supported, yet")
 
 
