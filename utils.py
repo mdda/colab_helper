@@ -23,6 +23,7 @@ def gdrive_mount(point='gdrive', link='my_drive'):
 
 
 def set_display_width(width=100):  # in pct
+  # Actually, Colab is fine on this count.  But regular Jupyter : This is handy for that!
   from IPython.core.display import display, HTML
   return display(HTML("<style>.container { width: %d%% !important; }</style>" % (width,)))
 
