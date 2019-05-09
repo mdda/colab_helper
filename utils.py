@@ -1,6 +1,9 @@
 import os, sys
 import time
-import subprocess, psutil
+import subprocess
+
+# Installed by default in colab - but may need pip install elsewhere
+import psutil
 
 import requests, shutil
 import json
@@ -23,7 +26,8 @@ def gdrive_mount(point='gdrive', link='my_drive'):
 
 
 def set_display_width(width=100):  # in pct
-  # Actually, Colab is fine on this count.  But regular Jupyter : This is handy for that!
+  # Actually, Colab is fine on this count.  
+  # But regular Jupyter : This is handy (tested=working)
   from IPython.core.display import display, HTML
   return display(HTML("<style>.container { width: %d%% !important; }</style>" % (width,)))
 
@@ -260,6 +264,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 
+# This works in Colab, but not Jupyter
 img_path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'img', 'RedDragon_logo_260x39.png')
 pil_im = Image.open(img_path) 
 plt.imshow(np.asarray(pil_im))
