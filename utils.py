@@ -25,7 +25,7 @@ def gdrive_mount(point='gdrive', link='my_drive'):
     print("'%s' mounted as '%s'" % (point+"/My Drive", link, ))
 
 
-def set_display_width(width=100):  # in pct
+def set_display_width(width=98):  # in pct 
   # Actually, Colab is fine on this count.  
   # But regular Jupyter : This is handy (tested=working)
   from IPython.core.display import display, HTML
@@ -82,7 +82,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
     if is_zip:
       print("Uncompressing .zip : '%s'" % (urlfilepath,))
       import zipfile
-      zipfile.ZipFile(urlfilepath, 'r').extractall(base_path)
+      zipfile.ZipFile(urlfilepath, 'r').extractall(dest_path_full)
     
     if is_tar:
       if is_tgz: 
@@ -92,7 +92,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
         tar_flags='r:'
         print("Unwrapping .tar : '%s'" % (urlfilepath,))
       import tarfile
-      tarfile.open(urlfilepath, tar_flags).extractall(base_path)
+      tarfile.open(urlfilepath, tar_flags).extractall(dest_path_full)
       #shutil.move(os.path.join(models_dir, models_orig_dir), os.path.join(models_dir, models_here_dir))
 
     if dest_path is not None and len(os.listdir( dest_path_full ))>0:
