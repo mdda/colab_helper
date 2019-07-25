@@ -82,7 +82,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
     if is_zip:
       print("Uncompressing .zip : '%s'" % (urlfilepath,))
       import zipfile
-      zipfile.ZipFile(urlfilepath, 'r').extractall(dest_path_full)
+      zipfile.ZipFile(urlfilepath, 'r').extractall(base_path)
     
     if is_tar:
       if is_tgz: 
@@ -92,7 +92,7 @@ def download(url, base_path='.', unwrap=True, dest_path=None):
         tar_flags='r:'
         print("Unwrapping .tar : '%s'" % (urlfilepath,))
       import tarfile
-      tarfile.open(urlfilepath, tar_flags).extractall(dest_path_full)
+      tarfile.open(urlfilepath, tar_flags).extractall(base_path)
       #shutil.move(os.path.join(models_dir, models_orig_dir), os.path.join(models_dir, models_here_dir))
 
     if dest_path is not None and len(os.listdir( dest_path_full ))>0:
