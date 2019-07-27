@@ -1,13 +1,11 @@
 import os, sys
 import re
 
-def thin_numbered_files(path, keep_history=7, keep_recent=3, delete=False):
-  #d='./checkpoints/2019-07-18_01-usegmm0/'
-  
-  # Figure out which files we're interested in thinning
-  
+def thin_numbered_files(path, stub='', keep_history=7, keep_recent=3, delete=False):
+  # First, figure out which files we're interested in thinning
   stems=dict()
   for f in os.listdir(path):
+    if not f.startswith(stub): continue
     stemmed = re.match(r'^(\D*)', f)
     if stemmed is None: continue
     #print(stemmed.group(1), f)
@@ -65,4 +63,4 @@ def thin_numbered_files(path, keep_history=7, keep_recent=3, delete=False):
     for f in delete_me:
       os.remove( os.path.join(path, f) )
       
-  return keep_me, delete_me
+  return dict(keep=keep_me, delete=delete_me)
