@@ -92,3 +92,31 @@ transparently have the updated code reloaded as you run the notebook cells) :
 while rsync-command-from-colab_helper; do inotifywait -qqre close_write,move,create,delete code/; done
 ```
 
+
+### File thinning
+
+To reduce the number of saved checkpoints to 3 recent ones, plus 7 others with 'round numbers', simply :
+
+```
+! git clone https://github.com/mdda/colab_helper
+from colab_helper import files as chf
+
+chf.thin_numbered_files('./checkpoints/2019-07-26_01-clipnorm', delete=True)
+```
+
+There are obviously more options, but the simple library is intended to 'do the right thing' 
+(and returns its suggestions if `delete=False`, which is the default value).  For instance, it
+should be able to figure out which filenames form a series (with the longest string prefix),
+and then extract the epoch/step numbers.  Of course, it's assumed that the files are saved using some 
+kind of convention, with the epoch/step as the first group of digits, like : 
+
+```
+model_0040000_58.5306.pth.tar  
+# ...
+model_0085000_49.8920.pth.tar
+# ...
+model_0115000_46.9202.pth.tar
+```
+
+
+
