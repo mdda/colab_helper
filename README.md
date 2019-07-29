@@ -102,6 +102,8 @@ To reduce the number of saved checkpoints to 3 recent ones, plus 7 others with '
 from colab_helper import files as chf
 
 chf.thin_numbered_files('./checkpoints/2019-07-26_01-clipnorm', delete=True)
+# This will return a dict(keep=?[], ?delete=[], ?comment=''), 
+# and if 'delete=True' is passed in, the 'delete' array will have been removed (careful!)
 ```
 
 There are obviously more options, but the simple library is intended to 'do the right thing' 
