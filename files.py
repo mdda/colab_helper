@@ -16,7 +16,7 @@ def thin_numbered_files(path, stub='', keep_history=7, keep_recent=3, delete=Fal
   stems_by_length = sorted( stems.keys(), key=lambda k: len(stems[k]))
   
   if len(stems_by_length)==0:
-    return  # Nothing to do
+    return dict(keep=None, comment='No files found')
     
   # So, we now have a candidate for the longest list of files 
   #   that start with the same non-numeric stem
@@ -25,7 +25,7 @@ def thin_numbered_files(path, stub='', keep_history=7, keep_recent=3, delete=Fal
   history = full[:-keep_recent]
   
   if len(history)<keep_history:
-    return  # Nothing to do 
+    return dict(keep=None, comment='Not enough files to thin out')
 
   # Need to figure out which of these historical ones to keep
   #   Work out a 'score' for each one, based on how 'nice' the number is
