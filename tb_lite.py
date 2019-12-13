@@ -1,6 +1,8 @@
-print("Hello from tb_lite")
+import numpy as np
 
-def pytorch_structure(model):
+#print("Hello from tb_lite")
+
+def pytorch_summary(model):
   size_tot=0
   for name, param in model.named_parameters():
     dims=list(param.size())
