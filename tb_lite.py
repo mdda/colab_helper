@@ -57,6 +57,8 @@ def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
   # These are the new 'y' values
   df['mean']  = cats.mean()[y]
   df['std']   = cats.std()[y]
+  
+  df['mid']   = df['mean']
   if min_max:
     df['upper'] = cats.max()[y]
     df['lower'] = cats.min()[y]
@@ -69,7 +71,11 @@ def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
 # https://towardsdatascience.com/its-2019-make-your-data-visualizations-interactive-with-plotly-b361e7d45dc6
 ! pip install plotly_express
 """
+init_plotly_done=False
 def init_plotly():
+  global init_plotly_done
+  if init_plotly_done: return
+  
   try:
     import plotly_express as pltx
   except e:
@@ -82,3 +88,67 @@ def init_plotly():
   plotly_offline.init_notebook_mode(connected=False)
   
   print("Plotly running offline")
+  init_plotly_done=True
+
+
+def series_fig(
+    df_arr,   # Array of thinned dataframes
+    x='step', # What the x axis is called in dataframes (might be 'ts', for instance)
+    xrange=None, yrange=None,   # User defined axis range ([low, high])
+    fig=None, # Can pass in a fig to add on to it
+  ):
+  if not init_plotly_done: init_plotly()
+  
+  import plotly_express as pltx
+  import plotly.graph_objects as pltgo
+  
+  if fig is None:
+    fig = pltgo.Figure()
+
+  for df in df_arr:
+    # https://plot.ly/python/line-charts/#filled-lines
+
+    # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
+    #fig = pltx.line(df, x='step', y='mean', range_y=[0.8,1.6])
+    fig.add_trace(pltgo.Scatter(x=df[x], y=df['mid'],  # +0.2
+                  fill=None, mode='lines', line_color='blue',
+                  #name='2019-12-13_01-slim-decoder-from0.ferts-fert-loss',
+                  #name='ferts-fert-loss',
+                  name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
+                  hovertemplate="(%{x:s},%{y:s})<br>"+  # %{y:.3f}
+                                "2019-12-13_01-slim-decoder-from0<br>"+
+                                "ferts-fert-loss"
+                                +"<extra></extra>", 
+                  #hover_data=["continent"]
+                  ))
+    #fig.add_scatter(x=df['step'], y=df['mean_plus'], mode='lines')
+
+    #https://plot.ly/python/filled-area-plots/
+    fig.add_trace(pltgo.Scatter(x=df[x], y=df['upper'],
+                  fill=None, mode='lines', 
+                  #fillcolor='rgba(0,100,80,0.2)',
+                  #line = list(color = 'transparent'),
+                  #line_color='#bbb', 
+                  line_color='rgba(255,255,255,0)',  # transparent
+                  hovertemplate="(%{x:s},%{y:s})<br><extra></extra>",
+                  showlegend=False,  )) 
+    fig.add_trace(pltgo.Scatter(x=df[x], y=df['lower'],
+                  fill='tonexty', # fill area between trace0 and trace1
+                  mode='lines', 
+                  #line_color='#bbb', 
+                  #fillcolor='#bbb',
+                  #opacity=0.50,
+                  fillcolor='rgba(0,0,0,0.2)',
+                  line_color='rgba(255,255,255,0)',  # transparent
+                  hovertemplate="(%{x:s},%{y:s})<br><extra></extra>",
+                  showlegend=False,  
+                  ))  
+
+  #fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
+  
+  if xrange is not None:
+    fig.update_xaxes(range=xrange)
+  if yrange is not None:
+    fig.update_yaxes(range=yrange)
+  
+  return fig
