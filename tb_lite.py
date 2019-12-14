@@ -94,7 +94,8 @@ def init_plotly():
 def series_fig(
     df_arr,   # Array of thinned dataframes
     x='step', # What the x axis is called in dataframes (might be 'ts', for instance)
-    xrange=None, yrange=None,   # User defined axis range ([low, high])
+    xrange=None, yrange=None,         # User defined axis range ([low, high])
+    point_format='(%{x:s},%{y:s})',   # Can include python formatting information
     fig=None, # Can pass in a fig to add on to it
   ):
   if not init_plotly_done: init_plotly()
@@ -106,31 +107,35 @@ def series_fig(
     fig = pltgo.Figure()
 
   for df in df_arr:
-    # https://plot.ly/python/line-charts/#filled-lines
-
     # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
+    # https://plot.ly/python/hover-text-and-formatting/
+    
+    hovertemplate=(
+                    point_format+"<br>"
+                    +"2019-12-13_01-slim-decoder-from0<br>"
+                    +"ferts-fert-loss"
+                    +"<extra></extra>"
+                  )
+    
     #fig = pltx.line(df, x='step', y='mean', range_y=[0.8,1.6])
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['mid'],  # +0.2
                   fill=None, mode='lines', line_color='blue',
-                  #name='2019-12-13_01-slim-decoder-from0.ferts-fert-loss',
-                  #name='ferts-fert-loss',
                   name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
-                  hovertemplate="(%{x:s},%{y:s})<br>"+  # %{y:.3f}
-                                "2019-12-13_01-slim-decoder-from0<br>"+
-                                "ferts-fert-loss"
-                                +"<extra></extra>", 
-                  #hover_data=["continent"]
+                  hovertemplate=hovertemplate,
                   ))
     #fig.add_scatter(x=df['step'], y=df['mean_plus'], mode='lines')
 
-    #https://plot.ly/python/filled-area-plots/
+    # https://plot.ly/python/line-charts/#filled-lines
+    # https://plot.ly/python/filled-area-plots/
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['upper'],
                   fill=None, mode='lines', 
                   #fillcolor='rgba(0,100,80,0.2)',
                   #line = list(color = 'transparent'),
                   #line_color='#bbb', 
+                  fillcolor='rgba(0,0,0,0.2)',
                   line_color='rgba(255,255,255,0)',  # transparent
-                  hovertemplate="(%{x:s},%{y:s})<br><extra></extra>",
+                  #hovertemplate=point_format+"<br><extra></extra>",
+                  hovertemplate=hovertemplate,
                   showlegend=False,  )) 
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['lower'],
                   fill='tonexty', # fill area between trace0 and trace1
@@ -140,7 +145,8 @@ def series_fig(
                   #opacity=0.50,
                   fillcolor='rgba(0,0,0,0.2)',
                   line_color='rgba(255,255,255,0)',  # transparent
-                  hovertemplate="(%{x:s},%{y:s})<br><extra></extra>",
+                  #hovertemplate=point_format+"<br><extra></extra>",
+                  hovertemplate=hovertemplate,
                   showlegend=False,  
                   ))  
 
