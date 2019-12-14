@@ -26,7 +26,6 @@ def load_events(base_path, series, as_list=False):
   for f in os.listdir(p_series):
     #print(f)
     efl = event_file_loader.EventFileLoader(os.path.join(p_series, f))
-    
     for i, e in enumerate(efl.Load()):
       #if i>=5:break
       #print(i, e)
@@ -42,7 +41,12 @@ def load_events(base_path, series, as_list=False):
         agg.append( (ts,step,sv) )
   if as_list: 
     return agg
-  return pd.DataFrame(agg, columns=['ts', 'step', 'value'])
+    
+  df = pd.DataFrame(agg, columns=['ts', 'step', 'value'])
+  # https://www.science-emergence.com/Articles/How-to-add-metadata-to-a-data-frame-with-pandas-in-python-/
+  df.base_path=base_path
+  df.series=series
+  return df
   
 def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
   df = pd.DataFrame()
@@ -65,6 +69,13 @@ def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
   else:
     df['upper'] = df['mean']+df['std']
     df['lower'] = df['mean']-df['std']
+
+  # Store the inputs as metadata on the tbinned set
+  df.x         = x
+  df.y         = y
+  df.min_max   = min_max
+  df.base_path = getattr(df_orig, 'base_path', '')
+  df.series    = getattr(df_orig, 'series', '')
   return df
 
 """
@@ -93,7 +104,7 @@ def init_plotly():
 
 def series_fig(
     df_arr,   # Array of thinned dataframes
-    x='step', # What the x axis is called in dataframes (might be 'ts', for instance)
+    #x='step', # What the x axis is called in dataframes (might be 'ts', for instance) - now retrieved from thinned df metadata
     xrange=None, yrange=None,         # User defined axis range ([low, high])
     point_format='(%{x:s},%{y:s})',   # Can include python formatting information
     fig=None, # Can pass in a fig to add on to it
@@ -119,24 +130,28 @@ def series_fig(
     return ret
   
   for i, df in enumerate(df_arr):
-    # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
-    # https://plot.ly/python/hover-text-and-formatting/
-    
+    x=getattr(df, 'x', 'step')
     c=cmap[i % len(cmap)]
     
     hovertemplate=(
-                    point_format+"<br>"
-                    +"2019-12-13_01-slim-decoder-from0<br>"
-                    +"ferts-fert-loss"
-                    +"<extra></extra>"
-                  )
+      point_format+"<br>"
+      #+"2019-12-13_01-slim-decoder-from0<br>"
+      +getattr(df, 'base_path', '')+"<br>"
+      #+"ferts-fert-loss"
+      +getattr(df, 'series', '')+"<br>"
+      +"<extra></extra>"
+    )
+    
+    # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
+    # https://plot.ly/python/hover-text-and-formatting/
     
     #fig = pltx.line(df, x='step', y='mean', range_y=[0.8,1.6])
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['mid'],  # +0.2
                   fill=None, mode='lines', 
                   #line_color='blue',
                   line_color=rbga(c),
-                  name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
+                  #name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
+                  name= getattr(df, 'base_path', '')+" "+getattr(df, 'series', ''),
                   hovertemplate=hovertemplate,
                   ))
     #fig.add_scatter(x=df['step'], y=df['mean_plus'], mode='lines')
