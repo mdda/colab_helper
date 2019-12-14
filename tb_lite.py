@@ -110,10 +110,19 @@ def series_fig(
   
   # Choosing a good sequence of different colours isn't going to be so easy...
   # http://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=5
-
-  for df in df_arr:
+  
+  # https://www.chronicle.com/blogs/profhacker/color-blind-accessible-figures/59189 :: Okabe and Ito :
+  cmap=[ (0,0,0), (230,159,0), (86,180,224), (0,158,115), (240,228,66), (0,114,178), (213,94,0), (204,121,167) ]
+  def rbga(c,alpha=1.0):
+    ret=f'rgba({c[0]},{c[1]},{c[2]},{alpha})'
+    #print(ret)
+    return ret
+  
+  for i, df in enumerate(df_arr):
     # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
     # https://plot.ly/python/hover-text-and-formatting/
+    
+    c=cmap[i % len(cmap)]
     
     hovertemplate=(
                     point_format+"<br>"
@@ -124,7 +133,9 @@ def series_fig(
     
     #fig = pltx.line(df, x='step', y='mean', range_y=[0.8,1.6])
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['mid'],  # +0.2
-                  fill=None, mode='lines', line_color='blue',
+                  fill=None, mode='lines', 
+                  #line_color='blue',
+                  line_color=rbga(c),
                   name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
                   hovertemplate=hovertemplate,
                   ))
@@ -135,9 +146,9 @@ def series_fig(
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['upper'],
                   fill=None, mode='lines', 
                   #fillcolor='rgba(0,100,80,0.2)',
-                  #line = list(color = 'transparent'),
+                  #fillcolor='rgba(0,0,0,0.2)',
+                  fillcolor=rbga(c, alpha=0.2),
                   #line_color='#bbb', 
-                  fillcolor='rgba(0,0,0,0.2)',
                   line_color='rgba(255,255,255,0)',  # transparent
                   #hovertemplate=point_format+"<br><extra></extra>",
                   hovertemplate=hovertemplate,
@@ -145,10 +156,11 @@ def series_fig(
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['lower'],
                   fill='tonexty', # fill area between trace0 and trace1
                   mode='lines', 
-                  #line_color='#bbb', 
-                  #fillcolor='#bbb',
                   #opacity=0.50,
-                  fillcolor='rgba(0,0,0,0.2)',
+                  #fillcolor='#bbb',
+                  #fillcolor='rgba(0,0,0,0.2)',
+                  fillcolor=rbga(c, alpha=0.2),
+                  #line_color='#bbb', 
                   line_color='rgba(255,255,255,0)',  # transparent
                   #hovertemplate=point_format+"<br><extra></extra>",
                   hovertemplate=hovertemplate,
