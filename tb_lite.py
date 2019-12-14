@@ -156,5 +156,8 @@ def series_fig(
     fig.update_xaxes(range=xrange)
   if yrange is not None:
     fig.update_yaxes(range=yrange)
+
+  #https://plot.ly/python/reference/#layout-legend  
+  fig.update_layout(legend= dict(x=-0.1, y=1.02, yanchor='bottom', ))
   
   return fig
