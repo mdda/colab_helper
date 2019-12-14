@@ -106,6 +106,8 @@ def series_fig(
   if fig is None:
     fig = pltgo.Figure()
 
+  #matplotlib.colors.to_rgb('yellow')  -> (1.0, 1.0, 0.0)
+
   for df in df_arr:
     # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
     # https://plot.ly/python/hover-text-and-formatting/
