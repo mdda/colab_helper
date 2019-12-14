@@ -144,24 +144,19 @@ def series_fig(
     # https://plot.ly/python/line-charts/#filled-lines
     # https://plot.ly/python/filled-area-plots/
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['upper'],
-                  fill=None, mode='lines', 
-                  #fillcolor='rgba(0,100,80,0.2)',
-                  #fillcolor='rgba(0,0,0,0.2)',
+                  mode='lines', fill=None, 
                   fillcolor=rbga(c, alpha=0.2),
-                  #line_color='#bbb', 
-                  line_color='rgba(255,255,255,0)',  # transparent
+                  #line_color='rgba(255,255,255,0)',  # transparent
+                  line_color=rbga(c, alpha=0.2),
                   #hovertemplate=point_format+"<br><extra></extra>",
                   hovertemplate=hovertemplate,
                   showlegend=False,  )) 
     fig.add_trace(pltgo.Scatter(x=df[x], y=df['lower'],
-                  fill='tonexty', # fill area between trace0 and trace1
-                  mode='lines', 
+                  mode='lines', fill='tonexty', # fill area between trace0 and trace1
                   #opacity=0.50,
-                  #fillcolor='#bbb',
-                  #fillcolor='rgba(0,0,0,0.2)',
                   fillcolor=rbga(c, alpha=0.2),
-                  #line_color='#bbb', 
-                  line_color='rgba(255,255,255,0)',  # transparent
+                  #line_color='rgba(255,255,255,0)',  # transparent
+                  line_color=rbga(c, alpha=0.2),
                   #hovertemplate=point_format+"<br><extra></extra>",
                   hovertemplate=hovertemplate,
                   showlegend=False,  
