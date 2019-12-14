@@ -107,6 +107,9 @@ def series_fig(
     fig = pltgo.Figure()
 
   #matplotlib.colors.to_rgb('yellow')  -> (1.0, 1.0, 0.0)
+  
+  # Choosing a good sequence of different colours isn't going to be so easy...
+  # http://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=5
 
   for df in df_arr:
     # https://plot.ly/python-api-reference/generated/plotly.express.line.html#plotly.express.line
