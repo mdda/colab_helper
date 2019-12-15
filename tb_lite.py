@@ -109,6 +109,7 @@ def series_fig(
     min_max=False,                    # If passed non-thinned dataframe 
     #x='step', # What the x axis is called in dataframes (might be 'ts', for instance) - now retrieved from thinned df metadata
     xrange=None, yrange=None,         # User defined axis range ([low, high])
+    ylog=False,                       # Do log plot
     point_format='(%{x:s},%{y:s})',   # Can include python formatting information
     fig=None,  # Can pass in a fig to add on to it
   ):
@@ -189,6 +190,9 @@ def series_fig(
     fig.update_xaxes(range=xrange)
   if yrange is not None:
     fig.update_yaxes(range=yrange)
+
+  if ylog:
+    fig.update_layout(yaxis_type="log")
 
   #https://plot.ly/python/reference/#layout-legend  
   fig.update_layout(legend= dict(x=-0.1, y=1.02, yanchor='bottom', ))
