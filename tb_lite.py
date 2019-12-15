@@ -20,8 +20,8 @@ def pytorch_summary(model):
     size_tot+=size
   print(f"{size_tot:10,d} : TOTAL")
 
-def load_events(base_path, series, as_list=False):
-  p_series = os.path.join(base_path, series)
+def load_events(base, experiment, series, as_list=False):
+  p_series = os.path.join(base, experiment, series)
   agg=[]
   for f in os.listdir(p_series):
     #print(f)
@@ -44,7 +44,8 @@ def load_events(base_path, series, as_list=False):
     
   df = pd.DataFrame(agg, columns=['ts', 'step', 'value'])
   # https://www.science-emergence.com/Articles/How-to-add-metadata-to-a-data-frame-with-pandas-in-python-/
-  df.base_path=base_path
+  df.base=base
+  df.experiment=experiment
   df.series=series
   return df
   
@@ -74,7 +75,8 @@ def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
   df.x         = x
   df.y         = y
   df.min_max   = min_max
-  df.base_path = getattr(df_orig, 'base_path', '')
+  df.base      = getattr(df_orig, 'base', '')
+  df.experiment= getattr(df_orig, 'experiment', '')
   df.series    = getattr(df_orig, 'series', '')
   return df
 
@@ -136,7 +138,7 @@ def series_fig(
     hovertemplate=(
       point_format+"<br>"
       #+"2019-12-13_01-slim-decoder-from0<br>"
-      +getattr(df, 'base_path', '')+"<br>"
+      +getattr(df, 'experiment', '')+"<br>"
       #+"ferts-fert-loss"
       +getattr(df, 'series', '')+"<br>"
       +"<extra></extra>"
@@ -151,7 +153,7 @@ def series_fig(
                   #line_color='blue',
                   line_color=rbga(c),
                   #name="2019-12-13_01-slim-decoder-from0.ferts-fert-loss", 
-                  name= getattr(df, 'base_path', '')+" "+getattr(df, 'series', ''),
+                  name= getattr(df, 'experiment', '')+" "+getattr(df, 'series', ''),
                   hovertemplate=hovertemplate,
                   ))
     #fig.add_scatter(x=df['step'], y=df['mean_plus'], mode='lines')
