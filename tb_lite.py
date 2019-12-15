@@ -192,6 +192,7 @@ def series_fig(
     fig.update_yaxes(range=yrange)
 
   if ylog:
+    # https://plot.ly/python/log-plot/
     fig.update_layout(yaxis_type="log")
 
   #https://plot.ly/python/reference/#layout-legend  
