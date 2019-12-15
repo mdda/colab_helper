@@ -71,7 +71,7 @@ def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
     df['upper'] = df['mean']+df['std']
     df['lower'] = df['mean']-df['std']
 
-  # Store the inputs as metadata on the tbinned set
+  # Store the inputs as metadata on the thinned set
   df.x         = x
   df.y         = y
   df.min_max   = min_max
@@ -105,11 +105,12 @@ def init_plotly():
 
 
 def series_fig(
-    df_arr,   # Array of thinned dataframes
+    df_arr,    # Array of dataframes (will be thinned if required)
+    min_max=False,                    # If passed non-thinned dataframe 
     #x='step', # What the x axis is called in dataframes (might be 'ts', for instance) - now retrieved from thinned df metadata
     xrange=None, yrange=None,         # User defined axis range ([low, high])
     point_format='(%{x:s},%{y:s})',   # Can include python formatting information
-    fig=None, # Can pass in a fig to add on to it
+    fig=None,  # Can pass in a fig to add on to it
   ):
   if not init_plotly_done: init_plotly()
   
@@ -132,6 +133,9 @@ def series_fig(
     return ret
   
   for i, df in enumerate(df_arr):
+    if getattr(df, 'x', None) is None:
+      df = thinned_out(df, min_max=min_max, )
+    
     x=getattr(df, 'x', 'step')
     c=cmap[i % len(cmap)]
     
