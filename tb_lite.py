@@ -20,6 +20,11 @@ def pytorch_summary(model):
     size_tot+=size
   print(f"{size_tot:10,d} : TOTAL")
 
+
+def get_experiments_and_series(base);
+  return
+
+
 def load_events(base, experiment, series, as_list=False):
   p_series = os.path.join(base, experiment, series)
   agg=[]
