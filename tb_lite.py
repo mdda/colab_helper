@@ -60,7 +60,7 @@ def ranges(df_orig, x='step', y='value', buckets=None, min_max=False):
   
   if buckets is None: 
     buckets=buckets_default
-    non_nan_sizing = df[y].count() // 8 # Need '8' points for a decent bucket
+    non_nan_sizing = df_orig[y].count() // 8 # Need '8' points for a decent bucket
     if buckets>non_nan_sizing: 
       buckets=non_nan_sizing
   else:
