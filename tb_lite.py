@@ -95,7 +95,7 @@ def init_plotly():
   
   try:
     import plotly_express as pltx
-  except e:
+  except Exception:
     import subprocess
     subprocess.call("pip install plotly_express".split())
     
