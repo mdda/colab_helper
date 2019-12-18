@@ -29,8 +29,11 @@ def load_events(base, experiment, series):
   p_series = os.path.join(base, experiment, series)
   agg=[]
   for f in os.listdir(p_series):
+    fpath = os.path.join(p_series, f)
+    if os.path.isdir(fpath) or 'profile' in f:
+      continue
     #print(f)
-    efl = event_file_loader.EventFileLoader(os.path.join(p_series, f))
+    efl = event_file_loader.EventFileLoader(fpath)
     for i, e in enumerate(efl.Load()):
       #if i>=5:break
       #print(i, e)
