@@ -53,8 +53,19 @@ def load_events(base, experiment, series):
   df.series=series
   return df
   
-def ranges(df_orig, x='step', y='value', buckets=1000, min_max=False):
+def ranges(df_orig, x='step', y='value', buckets=None, min_max=False):
+  buckets_default = 1000  
+  
   df = pd.DataFrame()
+  
+  if buckets is None: 
+    buckets=buckets_default
+    non_nan_sizing = df[y].count() // 8 # Need '8' points for a decent bucket
+    if buckets>non_nan_sizing: 
+      buckets=non_nan_sizing
+  else:
+    pass # If buckets is given explicitly, use that value
+  
   # https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.qcut.html
   # https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-output-from-series-to-dataframe
   cats = df_orig.groupby( pd.qcut(df_orig[x], buckets), 
