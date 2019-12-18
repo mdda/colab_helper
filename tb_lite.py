@@ -21,11 +21,11 @@ def pytorch_summary(model):
   print(f"{size_tot:10,d} : TOTAL")
 
 
-def get_experiments_and_series(base);
+def get_experiments_and_series(base):
   return
 
 
-def load_events(base, experiment, series, as_list=False):
+def load_events(base, experiment, series):
   p_series = os.path.join(base, experiment, series)
   agg=[]
   for f in os.listdir(p_series):
@@ -41,20 +41,16 @@ def load_events(base, experiment, series, as_list=False):
         # https://developers.google.com/protocol-buffers/docs/pythontutorial
         #print(f"Found {type(v)}")
         #print(f"Found {summary_value[0].simple_value}")
-        sv = summary_value[0].simple_value
-        #print(ts,step,sv)
-        agg.append( (ts,step,sv) )
-  if as_list: 
-    return agg
+        agg.append( {'ts':ts,'step':step, summary_value[0].tag:summary_value[0].simple_value,} )
     
-  df = pd.DataFrame(agg, columns=['ts', 'step', 'value'])
+  df = pd.DataFrame(agg)  # , columns=['ts', 'step', 'value']
   # https://www.science-emergence.com/Articles/How-to-add-metadata-to-a-data-frame-with-pandas-in-python-/
   df.base=base
   df.experiment=experiment
   df.series=series
   return df
   
-def thinned_out(df_orig, x='step', y='value', buckets=1000, min_max=False):
+def ranges(df_orig, x='step', y='value', buckets=1000, min_max=False):
   df = pd.DataFrame()
   # https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.qcut.html
   # https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-output-from-series-to-dataframe
@@ -112,7 +108,8 @@ def init_plotly():
 def series_fig(
     df_arr,    # Array of dataframes (will be thinned if required)
     min_max=False,                    # If passed non-thinned dataframe 
-    #x='step', # What the x axis is called in dataframes (might be 'ts', for instance) - now retrieved from thinned df metadata
+    x='step',  # What the x axis is called in dataframes (might be 'ts', for instance) - now retrieved from thinned df metadata
+    y='value', # What the y axis is called in the dataframes
     xrange=None, yrange=None,         # User defined axis range ([low, high])
     ylog=False,                       # Do log plot
     point_format='(%{x:s},%{y:s})',   # Can include python formatting information
@@ -140,7 +137,7 @@ def series_fig(
   
   for i, df in enumerate(df_arr):
     if getattr(df, 'x', None) is None:
-      df = thinned_out(df, min_max=min_max, )
+      df = ranges(df, y=y, min_max=min_max, )
     
     x=getattr(df, 'x', 'step')
     c=cmap[i % len(cmap)]
